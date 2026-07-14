@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>非遗传承纪实</title>
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Microsoft YaHei",SimSun,serif;
+}
+html{
+  scroll-behavior: smooth;
+}
+body{
+  background-color: #6d0f1d;
+  background-image: linear-gradient(rgba(180,40,60,0.22) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(180,40,60,0.22) 1px,transparent 1px);
+  background-size:30px 30px;
+}
+/* 全站统一导航 固定样式 */
+.nav {
+  width:100%;
+  background: #a91628;
+  padding: 18px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 42px; /* 统一固定链接间距，42px和截图原版对齐，可微调大小 */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  position: sticky;
+  top:0;
+  z-index:999;
+}
+.nav a {
+  color:#fff;
+  text-decoration:none;
+  font-size:16px;
+  transition: all 0.3s;
+}
+.nav a:hover{
+  color:#ffd358;
+}
+
+/* ========== 面包屑导航（全站统一） ========== */
+.breadcrumb {
+  max-width: 1100px;
+  margin: 0 auto 18px;
+  padding: 0 20px;
+  color: #fff;
+  font-size: 15px;
+}
+.breadcrumb ul {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.breadcrumb li a {
+  color: #ffd358;
+  text-decoration: none;
+}
+.breadcrumb li a:hover {
+  text-decoration: underline;
+}
+.breadcrumb li:not(:last-child)::after {
+  content: ">";
+  color: #ccc;
+  margin-left: 8px;
+}
+.breadcrumb li:last-child {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* ========== 导航下方 全屏大图 ========== */
+.full-banner {
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.full-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.container{
+  max-width:1100px;
+  margin:35px auto;
+  padding:0 20px;
+}
+.title{
+  text-align:center;
+  color:#ffd358;
+  font-size:30px;
+  margin-bottom:30px;
+}
+/*卡片统一深色样式（和闯关页面完全一致）*/
+.card{
+  background: #821427;
+  padding:30px;
+  border-radius:16px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.3);
+  margin-bottom:30px;
+  color:#fff;
+}
+.card h3{
+  color:#ffd358;
+  margin-bottom:20px;
+  font-size:24px;
+  text-align:center;
+}
+hr{margin:24px 0;border-color:rgba(255,211,88,0.2);border-width:1px 0 0 0;}
+/*单人传承人卡片样式*/
+.artist-box{
+  display:flex;
+  gap:25px;
+  align-items:flex-start;
+  margin-bottom:20px;
+}
+.artist-box img{
+  width:220px;
+  height:260px;
+  object-fit:cover;
+  border-radius:10px;
+  border:2px solid #ffd358;
+}
+.artist-text h4{
+  color:#ffd358;
+  font-size:22px;
+  margin-bottom:12px;
+}
+.artist-text p{
+  line-height:1.8;
+  font-size:16px;
+}
+/*单个视频样式，一人配一个视频*/
+.single-video{
+  margin-top:18px;
+  text-align:center;
+}
+.single-video video{
+  width:420px;
+  border-radius:8px;
+  border:2px solid #ffd358;
+}
+.single-video h5{
+  color:#ffd358;
+  margin-top:8px;
+  font-size:15px;
+}
+/*返回顶部*/
+#backTop{
+  position:fixed;
+  right:30px;
+  bottom:30px;
+  width:45px;
+  height:45px;
+  background:#ffd358;
+  color:#a91628;
+  text-align:center;
+  line-height:45px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:20px;
+  font-weight:bold;
+  box-shadow:0 3px 8px rgba(0,0,0,0.2);
+  transition:0.3s;
+  z-index:999;
+  display:none;
+}
+#backTop:hover{transform:scale(1.1);}
+.footer{
+  background:#590c1a;
+  color:#ddd;
+  text-align:center;
+  padding:30px 0;
+  margin-top:50px;
+  border-top:1px solid rgba(255,211,88,0.1);
+}
+</style>
+</head>
+
+<body>
+<div class="nav">
+    <a href="../index.html">首页</a>
+    <a href="over.html">非遗总览</a>
+    <a href="game.html">闯关抽卡</a>
+    <a href="story.html">传承纪实</a>
+    <a href="message.html">守护留言</a>
+</div>
+
+<!-- ========== 全屏大图 放在导航正下方 ========== -->
+<div class="full-banner">
+  <img src="../images2/chuancheng.png" alt="非遗传承纪实">
+</div>
+
+<!-- ========== 面包屑（位置 100% 统一） ========== -->
+<div class="breadcrumb">
+  <ul>
+    <li><a href="../index.html">首页</a></li>
+    <li>非遗传承纪实</li>
+  </ul>
+</div>
+
+<div class="container">
+  <h2 class="title">👨‍🏭非遗传承人纪实与非遗保护纪实</h2>
+
+  <!--第一位：姚建萍 苏绣 独立卡片-->
+  <div class="card">
+    <h3>第一位守艺人：姚建萍｜国家级苏绣非遗传承人</h3>
+    <div class="artist-box">
+      <img src="../images1/5.1.png" alt="姚建萍">
+      <div class="artist-text">
+        <h4>深耕苏绣四十载，以针为笔绣山河</h4>
+        <p>姚建萍出身苏州刺绣世家，自幼跟随家中长辈学习传统苏绣，年少便熟练掌握平针、盘金、打籽等几十种传统针法。成年后发现传统苏绣题材受限、受众日渐变少，决心打破固有创作框架，把国画、油画的光影构图融入刺绣创作，开创现代写实苏绣。<br>
+        多年来，她的作品多次被选作国家外交礼品送往海外各国，登上国内外艺术大展。为留住苏绣技艺，她在苏州创办非遗传习基地，常年面向在校学生、社会爱好者开设公益课程，手把手带徒，累计培育数百名新生代绣娘，让千年苏绣不断薪火相传。</p>
+      </div>
+    </div>
+    <!--单人配套视频-->
+    <div class="single-video">
+    
+    </div>
+  </div>
+
+  <!--第二位：周海平 皖南竹篾编织 独立卡片-->
+  <div class="card">
+    <h3>第二位守艺人：周海平｜安徽宣城竹篾编织传承人</h3>
+    <div class="artist-box">
+      <img src="../images1/5.2.png" alt="周海平">
+      <div class="artist-text">
+        <h4>守一山青竹，守一门乡土老手艺</h4>
+        <p>周海平是安徽宣城本土竹编手艺人，从少年拜师学艺起，深耕皖南竹篾编织三十余年，精通从竹子选材、蒸煮、劈篾、拉丝到纹样编织全套古法工序。随着塑料制品普及，老式竹篮、竹簸箕慢慢被淘汰，竹编手艺濒临失传。<br>
+        他走遍宣城周边各个古村落，寻访老匠人、收集濒临消失的传统编织纹样，结合现代审美改良产品，开发竹制书签、茶具收纳、文创摆件等新品。同时走进本地中小学开设竹编兴趣课堂，利用课余时间免费授课，让年轻孩子近距离接触竹艺，守住皖南乡土非遗。</p>
+      </div>
+    </div>
+    <!--单人配套视频-->
+    <div class="single-video">
+      
+    </div>
+  </div>
+
+  <!--第三位：蔺涛 绛州澄泥砚 独立卡片-->
+  <div class="card">
+    <h3>第三位守艺人：蔺涛｜山西绛州澄泥砚国家级传承人</h3>
+    <div class="artist-box">
+      <img src="../images1/5.3.png" alt="蔺涛">
+      <div class="artist-text">
+        <h4>耗时半生，复原失传三百年澄泥古法</h4>
+        <p>澄泥砚位列中国四大名砚，明清之后古法烧制工艺渐渐失传，配方、泥料炼制、窑火把控等关键技艺残缺不全。蔺涛立志复原古法澄泥砚，数十年间奔走汾河沿岸古窑遗址，查阅海量古籍文献，反复调试泥料配比、窑温，历经上千次失败试验，耗时二十余年完整复原失传古法。<br>
+        如今他创办澄泥砚非遗工坊与研学基地，一边复刻历代经典古砚，一边研发便携文创小砚；常态化开设非遗体验研学活动，接待各地研学学子，用实际行动让沉寂百年的澄泥砚重回大众视野。</p>
+      </div>
+    </div>
+    <!--单人配套视频-->
+    <div class="single-video">
+      
+    </div>
+  </div>
+
+  <!--第四块：国家级非遗保护工程-->
+  <div class="card">
+    <h3>📜国家级非遗保护工程纪实</h3>
+    <p style="line-height:1.8;font-size:16px;">
+      1.<strong>全国非遗资源普查工程</strong>：历时多年全国地毯式摸排，收录民间口头文学、传统手工、戏曲曲艺等超10万项非遗资源，建立国家级非遗档案库，留存大量濒临消失的乡土技艺资料；<br><br>
+      2.<strong>非遗工坊扶持政策</strong>国家专项财政补贴落地县域乡村，扶持上千家乡村非遗手工作坊落地，帮助手艺人对接市场，解决传统手艺销路难题，带动乡村就业；<br><br>
+      3.<strong>非遗数字化存档项目</strong>联合各大博物院、高校，以高清影像、录音、3D扫描形式，对高龄传承人独门手艺全流程录制存档，永久数字化保存，避免人亡艺绝。
+    </p>
+  </div>
+
+  <!--第五块：非遗现代活化落地案例-->
+  <div class="card">
+    <h3>✨非遗现代活化落地案例</h3>
+    <p style="line-height:1.8;font-size:16px;">
+      广西壮锦传统纹样联动国潮服饰品牌，把民族织锦印花做成日常穿搭面料；江西南丰傩舞改编现代舞台剧，全国多地剧院巡回演出；景德镇迷你陶瓷摆件、苏绣书签、澄泥砚文创小砚陆续上线文创市场；各地非遗进景区、进校园、进商超，让尘封的老手艺融入当代年轻人日常生活，实现传统技艺市场化长效传承。
+    </p>
+  </div>
+</div>
+
+<div id="backTop" onclick="backTop()">↑</div>
+<div class="footer">
+<p>薪火拾遗·中国非遗博览 | 前端期末课程大作业</p>
+</div>
+
+<script>
+//返回顶部
+function backTop(){
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+window.onscroll = function(){
+  let topBtn = document.getElementById("backTop");
+  topBtn.style.display = window.scrollY>300 ? "block":"none";
+}
+</script>
+</body>
+</html>

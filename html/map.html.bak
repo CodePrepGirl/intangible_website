@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>非遗地域地图</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+#chinaMap{
+  width:100%;
+  height:520px;
+  background:#f1ece2;
+  border:1px solid #ccc;
+  position:relative;
+}
+.dot{
+  width:12px;height:12px;
+  background:#c41e3a;
+  border-radius:50%;
+  position:absolute;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="container">
+    <a href="index.html">首页</a>
+    <a href="overview.html">非遗总览</a>
+    <a href="map.html">非遗地图</a>
+    <a href="game.html">闯关抽卡</a>
+    <a href="diy.html">DIY纹样工坊</a>
+    <a href="story.html">传承纪实</a>
+    <a href="message.html">守护留言</a>
+  </div>
+</div>
+<div class="container">
+  <h2 class="title">中华非遗地域分布地图</h2>
+  <div class="card">
+    <div id="chinaMap">
+      <!--点位：坐标简易模拟国内地理位置-->
+      <div class="dot" style="top:22%;left:14%" data-info="北京｜京剧：国粹戏曲，唱念做打"></div>
+      <div class="dot" style="top:28%;left:11%" data-info="河北蔚县｜剪纸：刻制套色窗花非遗"></div>
+      <div class="dot" style="top:35%;left:32%" data-info="江苏苏州｜苏绣：四大名绣之首"></div>
+      <div class="dot" style="top:42%;left:38%" data-info="江西景德镇｜手工制瓷技艺"></div>
+      <div class="dot" style="top:46%;left:41%" data-info="江西南丰｜南丰傩舞，祭祀舞蹈活化石"></div>
+      <div class="dot" style="top:32%;left:19%" data-info="陕西华阴｜华阴老腔原生态说唱"></div>
+      <div class="dot" style="top:55%;left:25%" data-info="广西｜壮锦织造技艺"></div>
+      <div class="dot" style="top:50%;left:30%" data-info="湖南湘西｜踏虎凿花"></div>
+      <div class="dot" style="top:38%;left:34%" data-info="江浙｜古琴艺术"></div>
+      <div class="map-pop" id="pop"></div>
+    </div>
+    <p class="sub-title mt20">地图红点=非遗所在地，点击查看详情，侧边小答题可领取抽奖次数</p>
+  </div>
+  <!--简易答题拿抽奖次数-->
+  <div class="card">
+    <h3>地图随堂小问答（答对+1次抽卡机会）</h3>
+    <p>问题1：苏绣发源地是哪个省份？<br>
+    <input type="radio" name="q1" value="江苏">江苏
+    <input type="radio" name="q1" value="四川">四川
+    <input type="radio" name="q1" value="广东">广东
+    </p>
+    <button class="btn" onclick="checkAnswer()">提交答案</button>
+    <script>
+      function checkAnswer(){
+        let val = document.querySelector('input[name="q1"]:checked')?.value;
+        if(val==="江苏"){
+          addDraw(1);
+          alert("回答正确！已赠送1次盲盒抽奖机会");
+        }else{
+          alert("答案错误，正确：江苏苏州");
+        }
+      }
+      //地图弹窗
+      let dots = document.querySelectorAll('.dot');
+      let pop = document.getElementById('pop');
+      dots.forEach(d=>{
+        d.onclick = function(){
+          pop.style.display="block";
+          pop.innerText = this.dataset.info;
+          pop.style.left = (this.offsetLeft+15)+"px";
+          pop.style.top = (this.offsetTop-20)+"px";
+        }
+      })
+      document.getElementById('chinaMap').onclick=e=>{
+        if(e.target.id==='chinaMap') pop.style.display='none';
+      }
+    </script>
+  </div>
+</div>
+<div id="backTop" onclick="backTop()">↑</div>
+<div class="footer">
+<p>薪火拾遗·中国非遗博览 | 前端期末课程大作业</p>
+</div>
+<script src="js/script.js"></script>
+</body>
+</html>

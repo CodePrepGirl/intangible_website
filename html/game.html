@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>非遗闯关&盲盒抽卡 - 薪火拾遗</title>
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Microsoft YaHei",SimSun,serif;
+}
+html{
+  scroll-behavior: smooth;
+}
+body{
+  background-color: #6d0f1d;
+  background-image: linear-gradient(rgba(180,40,60,0.22) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(180,40,60,0.22) 1px,transparent 1px);
+  background-size:30px 30px;
+}
+/* 全站统一导航 固定样式 */
+.nav {
+  width:100%;
+  background: #a91628;
+  padding: 18px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 42px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  position: sticky;
+  top:0;
+  z-index:999;
+}
+.nav a {
+  color:#fff;
+  text-decoration:none;
+  font-size:16px;
+  transition: all 0.3s;
+}
+.nav a:hover{
+  color:#ffd358;
+}
+
+/* ==========面包屑：和banner同宽，左右对齐========== */
+.breadcrumb {
+  max-width: 1100px;
+  margin:0 auto 20px;
+  padding: 0 20px;
+  color: #fff;
+  font-size: 15px;
+}
+.breadcrumb ul {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.breadcrumb li a {
+  color: #ffd358;
+  text-decoration: none;
+}
+.breadcrumb li a:hover {
+  text-decoration: underline;
+}
+.breadcrumb li:not(:last-child)::after {
+  content: ">";
+  color: #ccc;
+  margin-left: 8px;
+}
+.breadcrumb li:last-child {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/*导航下方盲盒总览大图 窄版居中*/
+.banner-box{
+  max-width:1100px;
+  margin:0 auto 12px;
+  padding:0 20px;
+}
+.banner-box img{
+  width:100%;
+  height:260px;
+  border-radius:16px;
+  object-fit:cover;
+  border:3px solid #ffd358;
+  box-shadow:0 6px 20px rgba(0,0,0,0.35);
+}
+.container{
+  max-width:1100px;
+  margin:0 auto 35px;
+  padding:0 20px;
+}
+.title{
+  text-align:center;
+  color:#ffd358;
+  font-size:30px;
+  margin-bottom:30px;
+}
+/*卡片统一深色样式*/
+.card{
+  background: #821427;
+  padding:30px;
+  border-radius:16px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.3);
+  margin-bottom:30px;
+  color:#fff;
+}
+.card h3{
+  color:#ffd358;
+  margin-bottom:18px;
+  font-size:22px;
+  text-align:center;
+}
+hr{margin:24px 0;border-color:rgba(255,211,88,0.2);border-width:1px 0 0 0;}
+
+.btn{
+  padding:11px 26px;
+  background:#ffd358;
+  color:#a91628;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+  display:block;
+  margin:15px auto;
+  font-size:15px;
+  transition:0.3s;
+}
+.btn:hover{background:#ffc107;}
+.btn:disabled{background:#ccc;cursor:not-allowed;}
+.ans-item{
+  margin:10px 10px;
+  transform:scale(1.1);
+}
+
+/*【原版居中3D抽卡卡片 放在答题下方】*/
+.card3d-wrap{
+  width:190px;
+  height:250px;
+  margin:22px auto;
+  perspective:850px;
+}
+.card3d{
+  width:100%;
+  height:100%;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 1.2s ease;
+}
+.card3d.turn{transform:rotateY(180deg);}
+.card3d-front,.card3d-back{
+  width:100%;
+  height:100%;
+  position:absolute;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  backface-visibility:hidden;
+}
+.card3d-front{
+  background:#ffd358;
+  color:#a91628;
+  font-weight:bold;
+  font-size:18px;
+}
+.card3d-back{
+  background:#a91628;
+  color:#ffd358;
+  transform:rotateY(180deg);
+  border:2px solid #ffd358;
+  text-align:center;
+}
+
+/*【收藏大卡片 放大灰亮】 */
+.collect-card-big-wrap{
+  display:flex;
+  gap:18px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin:25px 0 10px;
+}
+.big-card{
+  width:125px;
+  height:160px;
+  border-radius:10px;
+  overflow:hidden;
+  border:3px solid #555;
+  filter:grayscale(100%) brightness(0.35);
+  transition:0.4s ease;
+}
+.big-card.get{
+  filter:grayscale(0) brightness(1);
+  border-color:#ffd358;
+  box-shadow:0 0 12px #ffd35888;
+}
+.big-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.box-wrap{
+  display:grid;
+  grid-template-columns: repeat(3, 200px);
+  justify-content: center;
+  gap: 18px;
+  margin-top:20px;
+}
+.box-item{
+  width: 200px;
+  height: 310px;
+  border-radius:12px;
+  overflow:hidden;
+  border:3px solid #444;
+  background:#222;
+  position:relative;
+}
+.box-item .mask{
+  width:100%;
+  height:100%;
+  background:#333;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:16px;
+  text-align: center;
+}
+.box-item img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:none;
+}
+.box-item.open .mask{display:none;}
+.box-item.open img{display:block;border-color:#ffd358;box-shadow:0 0 12px #ffd358;}
+
+/*返回顶部*/
+#backTop{
+  position:fixed;
+  right:30px;
+  bottom:30px;
+  width:45px;
+  height:45px;
+  background:#ffd358;
+  color:#a91628;
+  text-align:center;
+  line-height:45px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:20px;
+  font-weight:bold;
+  box-shadow:0 3px 8px rgba(0,0,0,0.2);
+  transition:0.3s;
+  z-index:999;
+  display:none;
+}
+#backTop:hover{transform:scale(1.1);}
+.footer{
+  background:#590c1a;
+  color:#ddd;
+  text-align:center;
+  padding:30px 0;
+  margin-top:50px;
+  border-top:1px solid rgba(255,211,88,0.1);
+}
+</style>
+</head>
+
+<body>
+<!--导航栏-->
+<div class="nav">
+  <a href="../index.html">首页</a>
+  <a href="over.html">非遗总览</a>
+  <a href="game.html">闯关抽卡</a>
+  <a href="story.html">传承纪实</a>
+  <a href="message.html">守护留言</a>
+</div>
+
+<!--1.banner窄图-->
+<div class="banner-box">
+  <img src="../images2/manghezonglan.png" alt="非遗盲盒全套总览">
+</div>
+
+<!--2.面包屑：和banner左右边界完全对齐，不再全屏居中-->
+<div class="breadcrumb">
+  <ul>
+    <li><a href="../index.html">首页</a></li>
+    <li>非遗闯关&盲盒抽卡</li>
+  </ul>
+</div>
+
+<!--3.主体容器+标题-->
+<div class="container">
+  <h2 class="title">🎴非遗知识闯关｜盲盒卡片收集&手办兑换</h2>
+
+  <!--1.非遗趣味知识区-->
+  <div class="card">
+    <h3>📌非遗趣味冷知识小课堂</h3>
+    <p style="line-height:1.8;">
+      ✨<b>冷知识1</b>：蔚县剪纸早年是窗花年货，古时候家家户户过年必贴，匠人不用剪刀全靠刻刀一层层雕琢；<br>
+      ✨<b>冷知识2</b>：苏绣针法足足40多种，一根丝线还能劈成几十根细线，薄如蝉翼；<br>
+      ✨<b>冷知识3</b>：京剧脸谱藏人设，红脸忠义、白脸奸诈、黑脸刚正，看脸就能分辨角色品性；<br>
+      ✨<b>冷知识4</b>：景德镇一件瓷器从泥土到成品要历经72道工序，部分名贵瓷器烧制成功率不足三成；<br>
+      ✨答题内容全部来自本网站全部知识点。
+    </p>
+  </div>
+
+  <!--2.答题区域-->
+  <div class="card">
+    <h3>📝非遗答题闯关：累计答对5题=1次抽卡机会｜当前答对：<span id="rightCount">0</span>/5</h3>
+    <p style="text-align:center;font-size:16px">剩余抽卡次数：<span id="drawNum">0</span>次</p>
+    <div id="qBox">
+	<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      <p id="qText" style="font-size:22px;margin-bottom:12px;text-align:center;"></p>
+      <div id="optBox" style="text-align:center;"></div>
+      <button class="btn" onclick="submitAnswer()">提交本题答案</button>
+    </div>
+
+    <hr>
+    <!--3.答题正下方【居中原版3D抽卡】-->
+    <h3>🎲非遗收藏卡抽取</h3>
+    <div class="card3d-wrap">
+      <div class="card3d" id="cardDom">
+        <div class="card3d-front">消耗次数抽非遗卡</div>
+        <div class="card3d-back" id="cardText"></div>
+      </div>
+    </div>
+    <button class="btn" id="drawBtn" onclick="startDraw()" disabled>抽取随机非遗收藏卡</button>
+    <p style="text-align:center;margin-top:8px;font-size:14px;color:#ddd;">不会抽到重复卡片，集齐四张后多余抽卡次数暂时无法抽卡</p>
+  </div>
+
+  <!--4.藏品收藏卡片区（放大灰/亮）-->
+  <div class="card">
+    <h3>📦藏品展示｜四大非遗收藏卡（已集齐自动点亮）</h3>
+    <div class="collect-card-big-wrap" id="cardPreviewBox">
+      <div class="big-card" data-name="蔚县剪纸"><img src="../images2/jianzhi1.png"></div>
+      <div class="big-card" data-name="苏绣"><img src="../images2/suxiu1.png"></div>
+      <div class="big-card" data-name="京剧"><img src="../images2/card1.png"></div>
+      <div class="big-card" data-name="景德镇瓷器"><img src="../images2/ci1.png"></div>
+    </div>
+    <p style="text-align:center;margin-top:10px;">收集进度：<span id="ownNum">0</span>/4</p>
+    <button class="btn" id="exchangeBoxBtn" onclick="exchangeGift()" disabled>集齐4张卡 → 抽取随机盲盒</button>
+  </div>
+
+  <!--5.盲盒区域：细长版 + 一行3个 + 居中显示-->
+  <div class="card">
+    <h3>🎁盲盒收藏图鉴（抽取后自动翻开）</h3>
+    <div class="box-wrap" id="boxContainer">
+      <div class="box-item"><div class="mask">未解锁</div><img src="../images2/manghe1.png"></div>
+      <div class="box-item"><div class="mask">未解锁</div><img src="../images2/manghe2.png"></div>
+      <div class="box-item"><div class="mask">未解锁</div><img src="../images2/manghe3.png"></div>
+      <div class="box-item"><div class="mask">未解锁</div><img src="../images2/manghe4.png"></div>
+      <div class="box-item"><div class="mask">未解锁</div><img src="../images2/manghe5.png"></div>
+      <div class="box-item"><div class="mask">？隐藏款</div><img src="../images2/yincangkuan.png"></div>
+    </div>
+    <p style="text-align:center;margin-top:15px;">盲盒完全随机抽取，随机解锁任意位置盲盒，不按顺序开启</p>
+  </div>
+</div>
+
+<div id="backTop" onclick="backTop()">↑</div>
+<div class="footer">
+<p>薪火拾遗·中国非遗博览 | 前端期末课程大作业</p>
+</div>
+
+<script>
+//存储key
+const DRAW_KEY = "game_drawTimes";
+const RIGHT_KEY = "game_rightNum";
+const CARD_KEY = "game_collectCard";
+const BOX_KEY = "game_openBoxArr";
+//四张卡池
+const allCard = ["蔚县剪纸","苏绣","京剧","景德镇瓷器"];
+//扩容超多趣味题库
+const questionList = [
+  {q:"蔚县剪纸发源地是？",opt:["山西","河北","山东"],ans:"河北"},
+  {q:"苏绣出自哪个省份？",opt:["江苏","安徽","福建"],ans:"江苏"},
+  {q:"京剧被誉为什么？",opt:["国画","国粹","国玉"],ans:"国粹"},
+  {q:"景德镇坐落于？",opt:["江西","湖南","浙江"],ans:"江西"},
+  {q:"蔚县剪纸主要工艺特点？",opt:["以刻代剪","纯剪刀制作","机器冲压"],ans:"以刻代剪"},
+  {q:"苏绣位列我国四大？",opt:["名酒","名绣","名瓷"],ans:"名绣"},
+  {q:"红脸脸谱在京剧代表？",opt:["奸诈","忠义","暴躁"],ans:"忠义"},
+  {q:"下列哪项属于景德镇四大名瓷？",opt:["青花","蜀锦","宣纸"],ans:"青花"},
+  {q:"华阴老腔是哪里非遗？",opt:["陕西","广西","黑龙江"],ans:"陕西"},
+  {q:"南丰傩舞在我国哪个省？",opt:["江西","广东","贵州"],ans:"江西"},
+  {q:"壮锦是哪个民族特色织造？",opt:["壮族","满族","藏族"],ans:"壮族"},
+  {q:"踏虎凿花主要流传地？",opt:["湖南湘西","河北张家口","苏州"],ans:"湖南湘西"},
+  {q:"京剧四大行当不含？",opt:["生旦","净丑","歌舞"],ans:"歌舞"},
+  {q:"下列不属于四大收藏卡的是？",opt:["剪纸","苏绣","皮影"],ans:"皮影"}
+];
+let nowQIndex = 0;
+
+//初始化本地存储
+function initLocal(){
+  if(!localStorage.getItem(DRAW_KEY)) localStorage.setItem(DRAW_KEY,"0");
+  if(!localStorage.getItem(RIGHT_KEY)) localStorage.setItem(RIGHT_KEY,"0");
+  if(!localStorage.getItem(CARD_KEY)) localStorage.setItem(CARD_KEY,JSON.stringify([]));
+  if(!localStorage.getItem(BOX_KEY)) localStorage.setItem(BOX_KEY,JSON.stringify([]));
+}
+initLocal();
+
+//刷新页面+卡片灰亮切换
+function refreshAll(){
+  let draw = localStorage.getItem(DRAW_KEY);
+  let right = localStorage.getItem(RIGHT_KEY);
+  let collectArr = JSON.parse(localStorage.getItem(CARD_KEY));
+  let openBoxArr = JSON.parse(localStorage.getItem(BOX_KEY));
+  document.getElementById("drawNum").innerText = draw;
+  document.getElementById("rightCount").innerText = right;
+  document.getElementById("ownNum").innerText = collectArr.length;
+
+  //抽卡按钮：有次数并且卡牌没集齐才能点
+  let drawBtn = document.getElementById("drawBtn");
+  if(Number(draw)>0 && collectArr.length <4){
+    drawBtn.disabled = false;
+    drawBtn.style.background="#ffd358";
+  }else{
+    drawBtn.disabled = true;
+    drawBtn.style.background="#ccc";
+  }
+
+  //大卡片：已收集高亮金边，未收集灰化
+  document.querySelectorAll(".big-card").forEach(item=>{
+    let cName = item.dataset.name;
+    if(collectArr.includes(cName)) item.classList.add("get");
+    else item.classList.remove("get");
+  })
+
+  //集齐4卡解锁盲盒兑换按钮
+  let exBtn = document.getElementById("exchangeBoxBtn");
+  if(collectArr.length >=4){
+    exBtn.disabled = false;
+    exBtn.style.background="#ffd358";
+    exBtn.style.cursor="pointer";
+  }else{
+    exBtn.disabled = true;
+    exBtn.style.background="#ccc";
+    exBtn.style.cursor="not-allowed";
+  }
+
+  //盲盒翻开状态
+  document.querySelectorAll(".box-item").forEach((box,idx)=>{
+    if(openBoxArr.includes(idx)) box.classList.add("open");
+    else box.classList.remove("open");
+  })
+  showQuestion();
+}
+
+//渲染题目
+function showQuestion(){
+  let q = questionList[nowQIndex];
+  document.getElementById("qText").innerText = q.q;
+  let optHtml = "";
+  q.opt.forEach(item=>{
+    optHtml += `<input type="radio" class="ans-item" name="qAns" value="${item}">${item}`;
+  })
+  document.getElementById("optBox").innerHTML = optHtml;
+}
+
+//提交答题
+function submitAnswer(){
+  let selectVal = document.querySelector('input[name="qAns"]:checked')?.value;
+  if(!selectVal){alert("请选择一项答案！");return;}
+  let rightAns = questionList[nowQIndex].ans;
+  let rightNum = Number(localStorage.getItem(RIGHT_KEY));
+  if(selectVal === rightAns){
+    rightNum +=1;
+    localStorage.setItem(RIGHT_KEY,rightNum);
+    alert(`回答正确！当前累计答对${rightNum}题`);
+    //满5题兑换抽奖次数
+    if(rightNum >=5){
+      let drawNum = Number(localStorage.getItem(DRAW_KEY))+1;
+      localStorage.setItem(DRAW_KEY,drawNum);
+      localStorage.setItem(RIGHT_KEY,"0");
+      alert("✅已满5题，自动获取1次抽卡！前往下方抽卡按钮抽取非遗卡片");
+    }
+  }else{
+    alert(`回答错误，正确答案：${rightAns}`);
+  }
+  nowQIndex = (nowQIndex+1)%questionList.length;
+  refreshAll();
+}
+
+//抽卡逻辑：只从缺失卡牌里随机，永远不重复
+function startDraw(){
+  let drawLeft = Number(localStorage.getItem(DRAW_KEY));
+  let collectArr = JSON.parse(localStorage.getItem(CARD_KEY));
+  if(drawLeft <=0){
+    alert("没有抽奖次数！去答题获取");
+    return;
+  }
+  if(collectArr.length >=4){
+    alert("四张卡牌已经全部集齐，无需继续抽卡");
+    return;
+  }
+  //筛选缺失卡片，只在没拿到的里面随机
+  let needCard = allCard.filter(item=>!collectArr.includes(item));
+  let randomCard = needCard[Math.floor(Math.random()*needCard.length)];
+
+  //扣除次数，存入新卡片
+  localStorage.setItem(DRAW_KEY,drawLeft-1);
+  collectArr.push(randomCard);
+  localStorage.setItem(CARD_KEY,JSON.stringify(collectArr));
+
+  let cardDom = document.getElementById("cardDom");
+  let textDom = document.getElementById("cardText");
+  cardDom.classList.add("turn");
+  textDom.innerText = `抽到：${randomCard}`;
+  setTimeout(()=>{
+    cardDom.classList.remove("turn");
+    refreshAll();
+  },1300)
+}
+
+//集齐4卡【完全随机盲盒，乱序随机点位】
+function exchangeGift(){
+  let collectArr = JSON.parse(localStorage.getItem(CARD_KEY));
+  if(collectArr.length <4) return;
+  //清空收藏卡片
+  localStorage.setItem(CARD_KEY,JSON.stringify([]));
+  let openBoxArr = JSON.parse(localStorage.getItem(BOX_KEY));
+  //筛选未开启盲盒
+  let closeArr = [];
+  for(let i=0;i<6;i++){
+    if(!openBoxArr.includes(i)) closeArr.push(i);
+  }
+  if(closeArr.length===0){
+    alert("全部盲盒已经收集完毕！");
+    refreshAll();
+    return;
+  }
+  let randIdx = closeArr[Math.floor(Math.random()*closeArr.length)];
+  openBoxArr.push(randIdx);
+  localStorage.setItem(BOX_KEY,JSON.stringify(openBoxArr));
+  alert("🎉消耗全套4张收藏卡，随机开出1款盲盒！");
+  refreshAll();
+}
+
+//返回顶部
+function backTop(){
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+window.onscroll = function(){
+  let topBtn = document.getElementById("backTop");
+  topBtn.style.display = window.scrollY>300 ? "block":"none";
+}
+
+refreshAll();
+</script>
+</body>
+</html>
