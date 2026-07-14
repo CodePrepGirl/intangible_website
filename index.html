@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>薪火拾遗 · 守护中国非物质文化遗产</title>
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Microsoft YaHei",SimSun,serif;
+}
+
+/* 加深纹路透明度，方格细纹清晰可见，低调国风纹理 */
+body{
+  background-color:#6d0f1d;
+  background-image: linear-gradient(rgba(180,40,60,0.22) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(180,40,60,0.22) 1px,transparent 1px);
+  background-size:30px 30px;
+}
+
+/* 导航栏原色 */
+.nav {
+  width:100%;
+  background:#a91628;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  position:relative;
+}
+.logo-wrap{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.nav-logo-icon{
+  width:32px;
+  height:32px;
+  border:2px solid #ffd358;
+  border-radius:50%;
+  color:#ffd358;
+  font-weight:bold;
+  font-size:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.nav-logo-text{
+  font-size:26px;
+  font-weight:bold;
+  color:#ffd358;
+  text-decoration:none;
+  letter-spacing:2px;
+}
+.nav-menu{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+}
+.nav-menu a {
+  color:#fff;
+  text-decoration:none;
+  font-size:16px;
+  margin: 0 20px;
+}
+.nav-menu a:hover{
+  color:#ffd358;
+}
+
+.top-banner {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.banner-img-wrap {
+  width: 100%;
+  height: 82vh;
+  overflow: hidden;
+}
+.banner-scroll {
+  display: flex;
+  height: 100%;
+  animation: scrollMove 55s linear infinite;
+}
+.banner-scroll img {
+  height: 100%;
+  width: 100vw;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+@keyframes scrollMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-600vw); }
+}
+.banner-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 82vh;
+  background: rgba(0,0,0,0.3);
+  z-index: 1;
+}
+
+.banner-text-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+  z-index: 2;
+  white-space: nowrap;
+}
+.main-title {
+  font-size: 50px;
+  color: #ffd358;
+  font-weight: bold;
+  text-shadow:1px 1px 6px #000;
+  margin-bottom: 10px;
+}
+.sub-title1 {
+  font-size:32px;
+  color:#fff;
+  margin-bottom:8px;
+}
+.sub-title2 {
+  font-size:20px;
+  color:#eee;
+  margin-bottom:22px;
+}
+
+.gold-btn {
+  padding:12px 30px;
+  background:#ffd358;
+  border:none;
+  border-radius:30px;
+  color:#222;
+  font-size:16px;
+  font-weight: bold;
+  cursor:pointer;
+}
+.gold-btn:hover {
+  background:#ffc838;
+}
+
+.bottom-red-bar {
+  width:100%;
+  background:#a91628;
+  padding:20px 0;
+  text-align:center;
+}
+.bottom-red-bar p {
+  color:#fff;
+  font-size:22px;
+  margin:0;
+}
+
+.container{
+  width:90%;
+  margin:30px auto;
+}
+
+/* 内容大卡片中等红 + 滚动入场动画 */
+.card{
+  background: #8b1526;
+  padding:22px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  margin-bottom:20px;
+  /* 初始状态：向下偏移+透明 */
+  opacity:0;
+  transform: translateY(80px);
+  transition: all 0.7s cubic-bezier(0.17, 0.89, 0.32, 1.28);
+}
+/* 激活类：复原位置，弹跳出场 */
+.card.show{
+  opacity:1;
+  transform: translateY(0);
+}
+.card h3{
+  color:#ffd358;
+  font-size:20px;
+  margin-bottom:15px;
+  letter-spacing:1px;
+}
+.card p{
+  font-size:16px;
+  line-height:1.8;
+  color:#ffffff;
+}
+
+.btn{
+  padding:8px 16px;
+  border:none;
+  background:#ffd358;
+  color:#8b1526;
+  border-radius:4px;
+  cursor:pointer;
+  margin-top:8px;
+  font-weight:bold;
+}
+.btn:hover{
+  background:#ffc838;
+}
+
+#backTop{
+  position:fixed;
+  right:30px;
+  bottom:30px;
+  width:40px;
+  height:40px;
+  background:#ffd358;
+  color:#8b1526;
+  text-align:center;
+  line-height:40px;
+  border-radius:50%;
+  cursor:pointer;
+  display: none;
+}
+
+.feat-grid {
+  display: flex;
+  gap: 18px;
+  margin:16px 0;
+  flex-wrap: wrap;
+}
+
+/*精品子卡片标准红*/
+.feat-item {
+  flex:1; min-width:220px;
+  background:#a91628;
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid #c93045;
+  transition: all 0.3s ease;
+}
+.feat-item:hover{
+  transform: translateY(-8px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+}
+.feat-item img {
+  width:100%; height:170px;
+  object-fit:cover;
+  transition: transform 0.35s ease;
+}
+.feat-item:hover img{
+  transform: scale(1.15);
+}
+.feat-info {
+  padding:12px;
+}
+.feat-info h4 {
+  color:#ffd358;
+  margin-bottom:6px;
+  font-size:17px;
+}
+.feat-info p{
+  color:#fff;
+}
+
+/*=====时间线：加贯穿黄金横线+每个朝代圆点=====*/
+.timeline-box {
+  overflow: hidden;
+  padding:20px 0;
+  position:relative;
+}
+/* 左右翻页箭头按钮 */
+.tl-btn{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#ffd358;
+  color:#8b1526;
+  border:none;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:9;
+}
+.tl-prev{left:5px;}
+.tl-next{right:5px;}
+.tl-btn:hover{background:#ffc838;}
+
+.timeline-wrap{
+  overflow-x:hidden;
+  margin:0 50px;
+}
+.timeline {
+  display: flex;
+  gap:30px;
+  min-width: max-content;
+  position:relative;
+}
+/* 整条横向黄金线，在朝代标题下方、图片顶部 */
+.timeline::before {
+  content:"";
+  position:absolute;
+  top:36px;
+  left:0;
+  width:100%;
+  height:3px;
+  background:#ffd358;
+  z-index:1;
+}
+
+.timeline-item {
+  width:160px;
+  text-align:center;
+  transition: all 0.3s ease;
+  position:relative;
+}
+/* 每个朝代正下方圆点，卡在横线上 */
+.timeline-item::before{
+  content:"";
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#ffd358;
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  top:32px;
+  z-index:2;
+}
+.timeline-item:hover{
+  transform: translateY(-5px);
+}
+.timeline-item img {
+  width:100px; height:80px;
+  border-radius:6px;
+  border:2px solid #ffd358;
+  background:#fff;
+  margin-top:18px;
+  transition: transform 0.35s ease;
+}
+.timeline-item:hover img{
+  transform: scale(1.12);
+}
+.timeline-item .year {
+  font-weight:bold;
+  color:#ffd358;
+  font-size:24px;
+  margin:6px 0;
+}
+.timeline-item p{
+  color:#fff;
+  margin-top:8px;
+}
+
+.area-box {
+  background: #a91628;
+  padding:20px;
+  border-radius:12px;
+  margin:10px 0;
+}
+.area-grid {
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.area-card {
+  flex:1; min-width:210px;
+  background:#8b1526;
+  border-radius:10px;
+  overflow:hidden;
+  transition: all 0.3s ease;
+  border:1px solid #a91628;
+}
+.area-card:hover{
+  transform: translateY(-8px);
+  box-shadow:0 7px 15px rgba(0,0,0,0.3);
+}
+.area-card img {
+  width:100%; height:130px;
+  object-fit:cover;
+  transition: transform 0.35s ease;
+}
+.area-card:hover img{
+  transform: scale(1.15);
+}
+.area-card p {
+  padding:10px;
+  color:#fff;
+}
+.area-card strong{
+  color:#ffd358;
+}
+
+.master-box {
+  background: #a91628;
+  padding:24px;
+  border-radius:12px;
+  margin:10px 0;
+}
+.master-grid {
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.master-card {
+  flex:1; min-width:230px;
+  background:#8b1526;
+  padding:14px;
+  border-radius:10px;
+  text-align:center;
+  transition: all 0.3s ease;
+  border:1px solid #a91628;
+}
+.master-card:hover{
+  transform: translateY(-8px);
+  box-shadow:0 7px 15px rgba(0,0,0,0.3);
+}
+.master-card img {
+  width:110px; height:140px;
+  object-fit:cover;
+  border-radius:6px;
+  margin-bottom:10px;
+  transition: transform 0.35s ease;
+}
+.master-card:hover img{
+  transform: scale(1.12);
+}
+.master-card h4{
+  color:#ffd358;
+  margin-bottom:6px;
+}
+.master-card p{
+  color:#fff;
+}
+
+/* ==========翻转卡片：两行三列+整体居中========== */
+.flip-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap:25px;
+  margin-top:22px;
+}
+.flip-card {
+  width: 180px;
+  height: 240px;
+  perspective: 1000px;
+}
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  border: 2px solid #ffd358;
+  border-radius: 10px;
+}
+.flip-card:hover .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.flip-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.flip-back {
+  background: #ffd358;
+  color: #8b1526;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  transform: rotateY(180deg);
+  padding: 10px;
+}
+
+.culture-imgs {
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:10px 0;
+  margin:12px 0;
+}
+.culture-imgs img {
+  height:150px;
+  border-radius:8px;
+  border:2px solid #ffd358;
+  transition: transform 0.35s ease;
+}
+.culture-imgs img:hover{
+  transform: scale(1.1);
+}
+
+/* ==========底部footer四栏布局（深色红底，对标参考图）========== */
+.footer{
+  width:100%;
+  background:#690f1b;
+  margin-top:40px;
+  padding:50px 8%;
+}
+.footer-wrap{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:30px;
+}
+.footer-col{
+  flex:1;
+  min-width:200px;
+}
+.footer-col h4{
+  color:#ffd358;
+  font-size:20px;
+  margin-bottom:18px;
+  letter-spacing:1px;
+}
+.footer-col p,.footer-col a{
+  color:#f8f8f8;
+  font-size:16px;
+  line-height:1.8;
+  text-decoration:none;
+}
+.footer-col a:hover{
+  color:#ffd358;
+}
+/* 订阅输入框 */
+.subscribe-box{
+  display:flex;
+  margin-top:10px;
+}
+.subscribe-box input{
+  padding:9px 12px;
+  border:none;
+  outline:none;
+  flex:1;
+  border-radius:3px 0 0 3px;
+}
+.subscribe-box button{
+  background:#ffd358;
+  border:none;
+  padding:0 16px;
+  color:#690f1b;
+  font-weight:bold;
+  border-radius:0 3px 3px 0;
+  cursor:pointer;
+}
+.subscribe-box button:hover{
+  background:#ffc838;
+}
+/* 底部版权 */
+.copy-text{
+  width:100%;
+  text-align:center;
+  padding:20px 0;
+  margin-top:35px;
+  border-top:1px solid #8c202e;
+  color:#ddd;
+  font-size:15px;
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="logo-wrap">
+    <div class="nav-logo-icon">承</div>
+    <a href="index.html" class="nav-logo-text">非遗中国</a>
+  </div>
+  <div class="nav-menu">
+    <a href="index.html">首页</a>
+    <a href="html/over.html">非遗总览</a>
+    <a href="html/game.html">闯关抽卡</a>
+    <a href="html/story.html">传承纪实</a>
+    <a href="html/message.html">守护留言</a>
+  </div>
+</div>
+
+<div class="top-banner">
+  <div class="banner-mask"></div>
+  <div class="banner-text-box">
+    <div class="main-title">薪火拾遗 · 守护中国非物质文化遗产</div>
+    <div class="sub-title1">传承千年文化</div>
+    <div class="sub-title2">感受非遗魅力与精髓</div>
+    <button class="gold-btn" onclick="location.href='html/over.html'">欣赏更多</button>
+  </div>
+
+  <div class="banner-img-wrap">
+    <div class="banner-scroll">
+      <img src="images1/1.6.png">
+      <img src="images1/1.5.png">
+      <img src="images1/1.4.png">
+      <img src="images1/1.3.png">
+      <img src="images1/1.2.png">
+      <img src="images1/1.1.png">
+      <img src="images1/1.6.png">
+      <img src="images1/1.5.png">
+      <img src="images1/1.4.png">
+      <img src="images1/1.3.png">
+      <img src="images1/1.2.png">
+      <img src="images1/1.1.png">
+    </div>
+  </div>
+</div>
+
+<div class="bottom-red-bar">
+  <p>探索非遗世界</p>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <h3>📌 经典非遗精品展示</h3>
+    <div class="feat-grid">
+      <div class="feat-item">
+        <img src="images1/2.1.png">
+        <div class="feat-info">
+          <h4>蔚县剪纸</h4>
+          <p>明代传承，刻刀工艺，色彩艳丽，北方民俗剪纸代表。</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <img src="images1/2.2.png">
+        <div class="feat-info">
+          <h4>苏州苏绣</h4>
+          <p>四大名绣之首，针法繁复，古时宫廷御用刺绣技艺。</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <img src="images1/2.3.png">
+        <div class="feat-info">
+          <h4>国粹京剧</h4>
+          <p>融汇唱念做打，脸谱艺术，我国戏曲标志性非遗。</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <img src="images1/2.4.png">
+        <div class="feat-info">
+          <h4>景德镇制瓷</h4>
+          <p>千年古法七十二道工序，青花瓷享誉海内外。</p>
+        </div>
+      </div>
+    </div>
+    <button class="btn" onclick="location.href='html/over.html'">查看更多非遗</button>
+  </div>
+
+  <div class="card">
+    <h3>📅 华夏非遗发展时间线</h3>
+    <div class="timeline-box">
+      <button class="tl-btn tl-prev" id="prevBtn">&lt;</button>
+      <button class="tl-btn tl-next" id="nextBtn">&gt;</button>
+      <div class="timeline-wrap" id="tlWrap">
+        <div class="timeline" id="tlList">
+          <div class="timeline-item">
+            <div class="year">远古</div>
+            <img src="images1/3.1.png">
+            <p>原始傩祭、彩陶纹饰</p>
+          </div>
+          <div class="timeline-item">
+            <div class="year">先秦</div>
+            <img src="images1/3.2.png">
+            <p>古琴、商周青铜锻铸</p>
+          </div>
+          <div class="timeline-item">
+            <div class="year">秦汉</div>
+            <img src="images1/3.4.png">
+            <p>蜀锦织造、皮影雏形</p>
+          </div>
+          <div class="timeline-item">
+            <div class="year">隋唐</div>
+            <img src="images1/3.5.png">
+            <p>唐三彩烧制、西安鼓乐</p>
+          </div>
+          <div class="timeline-item">
+            <div class="year">两宋</div>
+            <img src="images1/3.6.png">
+            <p>宋锦、龙泉青瓷、雕版印刷</p>
+          </div>
+          <div class="timeline-item">
+            <div class="year">元代</div>
+            <img src="images1/3.7.png">
+            <p>元曲、蒙古族长调民歌</p>
+          </div>
+          <div class="timeline-item">
+            <div class="year">明代</div>
+            <img src="images1/3.8.png">
+            <p>昆曲、剪纸、木版年画</p>
+          </div>
+          <div class="timeline-item">
+            <div class="year">清代</div>
+            <img src="images1/3.9.png">
+            <p>京剧、景泰蓝、宣纸技艺</p>
+          </div>
+          <div class="timeline-item">
+            <div class="year">民国</div>
+            <img src="images1/3.10.png">
+            <p>各地曲艺、民间民俗节庆</p>
+          </div>
+          <div class="timeline-item">
+            <div class="year">2001起</div>
+            <img src="images1/3.11.png">
+            <p>非遗申遗、国家名录普查</p>
+          </div>
+          <div class="timeline-item">
+            <div class="year">现代</div>
+            <img src="images1/3.12.png">
+            <p>太极拳、制茶技艺入非遗</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn" onclick="location.href='html/over.html'">查看完整历史与非遗名录</button>
+  </div>
+
+  <div class="card">
+    <h3>🗺️ 全国非遗四大片区</h3>
+    <div class="area-box">
+      <div class="area-grid">
+        <div class="area-card">
+          <img src="images1/4.1.png">
+          <p><strong>江南片区</strong><br>苏绣、青瓷、古琴、宋锦</p>
+        </div>
+        <div class="area-card">
+          <img src="images1/4.2.png">
+          <p><strong>北方片区</strong><br>京剧、剪纸、皮影、面塑</p>
+        </div>
+        <div class="area-card">
+          <img src="images1/4.3.png">
+          <p><strong>西南片区</strong><br>壮锦、傩舞、苗族银饰</p>
+        </div>
+        <div class="area-card">
+          <img src="images1/4.4.png">
+          <p><strong>西北片区</strong><br>酥油花、木卡姆、游牧曲艺</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>👨‍🎨 非遗守艺人风采</h3>
+    <div class="master-box">
+      <div class="master-grid">
+        <div class="master-card">
+          <img src="images1/5.1.png">
+          <h4>姚建萍</h4>
+          <p>苏绣国家级传承人，深耕四十余年，国礼刺绣创作者。</p>
+        </div>
+        <div class="master-card">
+          <img src="images1/5.2.png">
+          <h4>周海平</h4>
+          <p>宣城竹篾非遗传承人，深耕竹艺三十余载，入校授课传承篾编手艺。</p>
+        </div>
+        <div class="master-card">
+          <img src="images1/5.3.png">
+          <h4>蔺涛</h4>
+          <p>澄泥砚国家级传承人，复原古法制砚，潜心传承千年砚台技艺。</p>
+        </div>
+      </div>
+    </div>
+    <button class="btn" onclick="location.href='html/story.html'">查看匠人完整故事</button>
+  </div>
+
+  <!-- 国潮纹样：上3下3 整组居中 -->
+  <div class="card">
+    <h3>🎨 非遗国潮活化 · 创意纹样展示</h3>
+    <p>传统刺绣纹样、青花瓷纹饰、戏曲脸谱融入潮牌服饰、文创摆件、日用好物，实现非遗年轻化传承。</p>
+    <div class="flip-container">
+      <!-- 第一行3个 -->
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front"><img src="images1/6.1.png"></div>
+          <div class="flip-back">苏绣纹样<br>传统美学</div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front"><img src="images1/6.2.png"></div>
+          <div class="flip-back">青花纹样<br>国风文创</div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front"><img src="images1/6.3.png"></div>
+          <div class="flip-back">脸谱纹样<br>国潮设计</div>
+        </div>
+      </div>
+      <!-- 第二行3个 -->
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front"><img src="images1/6.4.png"></div>
+          <div class="flip-back">剪纸纹样<br>民俗艺术</div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front"><img src="images1/6.5.png"></div>
+          <div class="flip-back">皮影纹样<br>非遗活化</div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-inner">
+          <div class="flip-front"><img src="images1/6.6.png"></div>
+          <div class="flip-back">木雕纹样<br>匠心传承</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎮 趣味互动入口</h3>
+    <button class="btn" onclick="location.href='html/game.html'">非遗知识闯关</button>
+    <button class="btn" onclick="location.href='html/message.html'" style="margin-left:12px;">守护留言</button>
+	<button class="btn" onclick="location.href='html/particle-tree.html'"style="margin-left:12px;">查看3D非遗粒子树</button>
+  <button class="btn" onclick="location.href='puzzle.html'"style="margin-left:12px;">非遗拼图闯关游戏</button>
+  </div>
+
+</div>
+
+<!-- ==========新增底部Footer四栏区域========== -->
+<footer class="footer">
+  <div class="footer-wrap">
+    <div class="footer-col">
+      <h4>关于我们</h4>
+      <p>致力于推广传承中华非遗文化，让更多人了解、爱上非物质文化遗产，助力传统手艺年轻化发展。</p>
+    </div>
+    <div class="footer-col">
+      <h4>快速链接</h4>
+      <p><a href="index.html">首页</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="story.html">传承纪实</a></p>
+      <p><a href="html/over.html">非遗总览</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="message.html">守护留言</a></p>
+      <p><a href="html/game.html">闯关抽卡</a></p>
+    </div>
+    <div class="footer-col">
+      <h4>联系我们</h4>
+      <p>邮箱：Eileen.Y@123.com</p>
+      <p>电话：010-12345678</p>
+      <p>地址：非遗文化研究中心</p>
+    </div>
+    <div class="footer-col">
+      <h4>订阅新闻</h4>
+      <p>输入邮箱订阅非遗资讯</p>
+      <div class="subscribe-box">
+        <input placeholder="输入您的邮箱">
+        <button>订阅</button>
+      </div>
+    </div>
+  </div>
+  <div class="copy-text">
+    ©2026 非遗中国 版权所有 | 本网站为非遗科普展示平台
+  </div>
+</footer>
+
+<div id="backTop" onclick="backTop()">↑</div>
+<script>
+// 返回顶部
+window.onscroll = function(){
+  let btn = document.getElementById("backTop");
+  btn.style.display = window.scrollY > 300 ? "block" : "none";
+}
+function backTop(){
+  window.scrollTo({top:0,behavior:'smooth'})
+}
+
+// 时间线左右滚动JS
+const wrap = document.getElementById('tlWrap');
+const list = document.getElementById('tlList');
+const prev = document.getElementById('prevBtn');
+const next = document.getElementById('nextBtn');
+const step = 220;
+
+prev.onclick = ()=>{
+  wrap.scrollBy({left:-step,behavior:'smooth'});
+}
+next.onclick = ()=>{
+  wrap.scrollBy({left:step,behavior:'smooth'});
+}
+
+// 卡片滚动弹跳入场动画JS
+const allCard = document.querySelectorAll('.card');
+function checkCardShow(){
+  allCard.forEach(item=>{
+    // 卡片距离顶部视口高度
+    let cardTop = item.getBoundingClientRect().top;
+    let winH = window.innerHeight;
+    // 进入视口60px就触发动画
+    if(cardTop < winH - 60){
+      item.classList.add('show');
+    }
+  })
+}
+window.addEventListener('scroll',checkCardShow);
+window.addEventListener('load',checkCardShow);
+</script>
+</body>
+</html>

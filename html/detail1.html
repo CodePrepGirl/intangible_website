@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>河北蔚县剪纸｜非遗详情-薪火拾遗</title>
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Microsoft YaHei",SimSun,serif;
+}
+html{
+  scroll-behavior: smooth;
+}
+
+/* 全局背景（和overview统一） */
+body{
+  background-color: #6d0f1d;
+  background-image: linear-gradient(rgba(180,40,60,0.22) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(180,40,60,0.22) 1px,transparent 1px);
+  background-size:30px 30px;
+}
+
+/* 导航栏置顶【最顶部】和overview样式颜色统一 */
+.nav {
+  width:100%;
+  background: #a91628;
+  padding: 18px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:26px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  position: sticky;
+  top:0;
+  z-index:999;
+}
+.nav a {
+  color:#fff;
+  text-decoration:none;
+  font-size:16px;
+  transition: all 0.3s;
+}
+.nav a:hover{
+  color:#ffd358;
+}
+
+/* ========== 面包屑导航样式 ========== */
+.breadcrumb {
+  max-width: 1080px;
+  margin: 20px auto;
+  padding: 0 20px;
+  color: #fff;
+  font-size: 15px;
+}
+.breadcrumb ul {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.breadcrumb li a {
+  color: #ffd358;
+  text-decoration: none;
+}
+.breadcrumb li a:hover {
+  text-decoration: underline;
+}
+.breadcrumb li:not(:last-child)::after {
+  content: ">";
+  color: #ccc;
+  margin-left: 8px;
+}
+.breadcrumb li:last-child {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* 导航下方全屏banner图 */
+.top-banner{
+  width:100%;
+  height:450px;
+  background:url("../images2/1.2.png") center no-repeat;
+  background-size: cover;
+}
+
+/* 一键返回顶部按钮 */
+#backTop{
+  position:fixed;
+  right:30px;
+  bottom:30px;
+  width:45px;
+  height:45px;
+  background:#ffd358;
+  color:#a91628;
+  text-align:center;
+  line-height:45px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:20px;
+  font-weight:bold;
+  box-shadow:0 3px 8px rgba(0,0,0,0.2);
+  transition:0.3s;
+  z-index:999;
+  display:none;
+}
+#backTop:hover{
+  background:#ffc107;
+  transform:scale(1.1);
+}
+
+/* banner下方独立标题区域，文字脱离图片 */
+.banner-title-box{
+  padding:35px 20px;
+  text-align:center;
+}
+.banner-title-box h1{
+  font-size:42px;
+  color:#ffd358;
+  margin-bottom:12px;
+}
+.banner-title-box p{
+  font-size:18px;
+  color:#ffffff;
+  opacity:0.9;
+}
+
+/* 容器居中 */
+.container{
+  width:100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 20px 50px;
+}
+
+/* 深红色悬浮开窗卡片（默认样式：纯深色背景） */
+.window-card{
+  background: #821427;
+  padding: 36px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  margin-bottom: 50px;
+  transition: 0.35s ease;
+  text-align: center;
+}
+.window-card:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 14px 35px rgba(0,0,0,0.4);
+}
+
+/* 默认内部样式：纯深色，无背景图 */
+.window-hole{
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,211,88,0.2);
+}
+.window-hole h2{
+  color: #ffd358;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.window-hole p{
+  color: #fff;
+  line-height: 2;
+  font-size: 15px;
+  margin-bottom: 12px;
+  text-align: center;
+  text-indent: 0;
+}
+
+/* 背景图卡片 */
+.last-card {
+  position: relative;
+}
+.last-card .window-hole{
+  background: url('../images2/detal.1.png') center center fixed;
+  background-size: cover;
+}
+
+/* 剪纸教学视频区域 */
+.video-block{
+  background: rgba(130,20,39,0.9);
+  padding: 40px;
+  border-radius: 16px;
+  margin-bottom: 50px;
+  text-align: center;
+}
+.video-block h2{
+  color: #ffd358;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+.video-row{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: center;
+}
+.video-box{
+  flex: 1;
+  min-width: 450px;
+}
+.video-box video{
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid #ffd358;
+}
+.video-desc{
+  flex: 1;
+  min-width: 300px;
+  color: #fff;
+  text-align: center;
+}
+.video-desc h3{
+  color: #ffd358;
+  margin-bottom: 15px;
+}
+.video-desc p{
+  line-height: 1.9;
+  margin-bottom: 10px;
+}
+
+/* 作品叠放展示：一张压半张，hover上浮凸显 */
+.work-block{
+  margin-bottom: 60px;
+  text-align: center;
+}
+.work-block h2{
+  color: #ffd358;
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 24px;
+}
+.work-wrap{
+  display: flex;
+  justify-content: center;
+  position: relative;
+  flex-wrap: wrap;
+  min-height: 280px;
+}
+.work-item{
+  width: 200px;
+  height: 240px;
+  margin-left: -40px;
+  position: relative;
+  z-index: 1;
+  transition: 0.4s ease;
+}
+.work-item:first-child{
+  margin-left: 0;
+}
+.work-item img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #ffd358;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.work-item:hover{
+  transform: translateY(-20px) scale(1.05);
+  z-index: 99;
+}
+
+/* 返回按钮 */
+.back-box{
+  text-align: center;
+  margin-bottom: 40px;
+}
+.btn{
+  padding: 12px 30px;
+  background: #ffd358;
+  color: #a91628;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.btn:hover{
+  background: #ffc107;
+}
+
+/* 页脚 */
+.footer{
+  background: #590c1a;
+  color: #ddd;
+  text-align: center;
+  padding: 30px 0;
+  border-top: 1px solid rgba(255,211,88,0.1);
+}
+</style>
+</head>
+
+<body>
+<!-- 1.最顶部导航栏 -->
+<div class="nav">
+  <a href="../index.html">首页</a>
+  <a href="over.html">非遗总览</a>
+  <a href="game.html">闯关抽卡</a>
+  <a href="story.html">传承纪实</a>
+  <a href="message.html">守护留言</a>
+</div>
+
+<!-- 2.导航下方全屏大图 -->
+<div class="top-banner"></div>
+
+<!-- ========== 面包屑放在这里 ========== -->
+<div class="breadcrumb">
+  <ul>
+    <li><a href="../index.html">首页</a></li>
+    <li><a href="over.html">非遗总览</a></li>
+    <li>河北蔚县剪纸</li>
+  </ul>
+</div>
+
+<!-- 3.图片下方独立大标题（不在图片上） -->
+<div class="banner-title-box">
+  <h1>✂️ 河北蔚县剪纸 · 国家级非遗</h1>
+  <p>六百年刻刀艺术 · 指尖上的中国年味</p>
+</div>
+
+<!-- 正文内容 -->
+<div class="container">
+  <!-- 第一个卡片：默认深色背景 -->
+  <div class="window-card">
+    <div class="window-hole">
+      <h2>📜 非遗溯源 · 六百年传承历史</h2>
+      <p>河北蔚县剪纸始于明代，是中国独一无二的“以刻代剪”彩色剪纸艺术，2006年被列入第一批国家级非物质文化遗产名录。</p>
+      <p>它起源于农家窗花，兴盛于民间民俗，历经数百年传承发展，成为中国民间美术中极具代表性的艺术瑰宝，也是北方民俗文化最直观的视觉表达。</p>
+    </div>
+  </div>
+
+  <!-- 第二个卡片：默认深色背景 -->
+  <div class="window-card">
+    <div class="window-hole">
+      <h2>⚙️ 传统制作四大工序</h2>
+      <p>【画稿】匠人手工绘制戏曲、花鸟、人物等图案，构图精巧、寓意吉祥。</p>
+      <p>【刻制】使用特制刻刀在多层宣纸上雕刻，线条细如发丝，刀法干净利落。</p>
+      <p>【点染】采用天然矿物颜料手工上色，色彩鲜艳、层次丰富。</p>
+      <p>【装裱】整理压平，制作成窗花、挂画、文创等多种形式作品。</p>
+    </div>
+  </div>
+
+  <!-- 带背景图卡片 -->
+  <div class="window-card last-card">
+    <div class="window-hole">
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    </div>
+  </div>
+
+  <!-- 第四个普通深色卡片 -->
+  <div class="window-card">
+    <div class="window-hole">
+      <h2>🎨 非遗传承与当代创新</h2>
+      <p>如今，蔚县剪纸已走出传统窗花的局限，成为文创设计、艺术展览、校园教育的重要载体。</p>
+      <p>越来越多的年轻人加入传承行列，用现代设计语言重新演绎传统纹样，让这门古老的民间艺术在新时代焕发出全新的生命力。</p>
+      <p>一把刻刀、一张宣纸、一抹色彩，传承的是文化，留住的是乡愁。</p>
+    </div>
+  </div>
+
+  <!-- 教学视频区 -->
+  <div class="video-block">
+    <h2>🎬 非遗剪纸教学视频</h2>
+    <div class="video-row">
+      <div class="video-box">
+        <video src="../images2/jianzhi.mp4" controls></video>
+      </div>
+      <div class="video-desc">
+        <h3>零基础入门教程</h3>
+        <p>本视频由蔚县非遗传承人亲自示范教学，从工具准备、基础刀法到简单图案制作，一步步带你体验传统剪纸的魅力。</p>
+        <p>只需准备刻刀、宣纸、颜料，在家就能轻松学习，感受非遗文化的乐趣。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 作品欣赏堆叠 -->
+  <div class="work-block">
+    <h2>🖼 经典作品欣赏</h2>
+    <div class="work-wrap">
+      <div class="work-item"><img src="../images2/jianzhi1.png"></div>
+      <div class="work-item"><img src="../images2/jianzhi2.png"></div>
+      <div class="work-item"><img src="../images2/jianzhi3.png"></div>
+      <div class="work-item"><img src="../images1/6.4.png"></div>
+      <div class="work-item"><img src="../images1/3.8.png"></div>
+    </div>
+  </div>
+
+  <div class="back-box">
+    <button class="btn" onclick="location.href='detail2.html'">前往下一个非遗介绍 -></button>
+  </div>
+</div>
+
+<!-- 返回顶部按钮 -->
+<div id="backTop" onclick="backTop()">↑</div>
+
+<div class="footer">
+  <p>薪火拾遗 · 中国非遗文化博览 | 前端课程设计</p>
+</div>
+
+<script>
+// 返回顶部功能
+function backTop(){
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+// 滚动显示/隐藏按钮
+window.onscroll = function(){
+  let btn = document.getElementById("backTop");
+  if(window.scrollY > 300){
+    btn.style.display = "block";
+  }else{
+    btn.style.display = "none";
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>非遗拼图闯关 - 薪火拾遗</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",SimSun,serif;}
+
+body{
+    background-color:#6d0f1d;
+  background-image: linear-gradient(rgba(180,40,60,0.22) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(180,40,60,0.22) 1px,transparent 1px);
+  background-size:30px 30px;
+}
+
+/* 全站统一导航 */
+.nav {
+    width:100%;
+    background: #a91628;
+    padding: 18px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 42px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    position: sticky;
+    top:0;
+    z-index:999;
+}
+.nav a {
+    color:#fff;
+    text-decoration:none;
+    font-size:16px;
+    transition: all 0.3s;
+}
+.nav a:hover{
+    color:#ffd358;
+}
+
+/* 面包屑 */
+.breadcrumb {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    color: #fff;
+    font-size:15px;
+}
+.breadcrumb ul {
+    list-style: none;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.breadcrumb li a {
+    color: #ffd358;
+    text-decoration: none;
+}
+.breadcrumb li a:hover {text-decoration: underline;}
+.breadcrumb li:not(:last-child)::after {
+    content: ">";
+    color: #ccc;
+    margin-left: 8px;
+}
+.breadcrumb li:last-child {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* 主容器 */
+.container{
+    max-width: 1200px;
+    margin: 0 auto 50px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+}
+
+.page-title{
+    grid-column: 1 / -1;
+    text-align:center;
+    color:#ffd358;
+    margin:10px 0 20px 0;
+    font-size:32px;
+    letter-spacing:3px;
+    text-shadow: 0 2px 8px rgba(255,211,88,0.3);
+}
+
+/* 左侧控制面板 */
+.side-card{
+    background: rgba(139, 21, 38, 0.85);
+    padding:25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    height: fit-content;
+    backdrop-filter: blur(2px);
+}
+
+.side-card h3{
+    color:#ffd358;
+    font-size:18px;
+    margin-bottom:15px;
+    border-left:4px solid #ffd358;
+    padding-left:10px;
+}
+
+.level-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:25px;
+}
+
+.level-btn{
+    padding:10px 12px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,211,88,0.3);
+    border-radius:6px;
+    color:#fff;
+    cursor:pointer;
+    transition:all 0.3s;
+    text-align:left;
+    font-size:14px;
+}
+.level-btn:hover, .level-btn.active{
+    background:rgba(255,211,88,0.15);
+    border-color:#ffd358;
+    color:#ffd358;
+}
+
+.difficulty-box{
+    display:flex;
+    gap:8px;
+    margin-bottom:25px;
+}
+.diff-btn{
+    flex:1;
+    padding:8px 0;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,211,88,0.3);
+    border-radius:6px;
+    color:#fff;
+    cursor:pointer;
+    font-size:13px;
+    transition:all 0.3s;
+}
+.diff-btn.active{
+    background:#ffd358;
+    color:#8b1526;
+    border-color:#ffd358;
+    font-weight:bold;
+}
+
+.info-item{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed rgba(255,211,88,0.2);
+    font-size:14px;
+}
+.info-item span:last-child{
+    color:#ffd358;
+    font-weight:bold;
+}
+
+.operate-btn{
+    width:100%;
+    padding:12px 0;
+    margin-top:15px;
+    background:#ffd358;
+    color:#8b1526;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:all 0.3s;
+    font-size:15px;
+}
+.operate-btn:hover{
+    background:#ffc838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255,211,88,0.3);
+}
+
+/* 右侧游戏区 */
+.game-area{
+    background: rgba(139, 21, 38, 0.85);
+    padding:30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    backdrop-filter: blur(2px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.game-title{
+    color:#ffd358;
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+/* 拼图棋盘 */
+.puzzle-board{
+    position:relative;
+    border:3px solid #ffd358;
+    background:rgba(0,0,0,0.2);
+    border-radius:8px;
+    padding:4px;
+    margin-bottom:25px;
+}
+.board-grid{
+    display:grid;
+    gap:2px;
+    background:rgba(255,211,88,0.1);
+    padding:2px;
+}
+.board-cell{
+    background:rgba(255,255,255,0.05);
+    border:1px dashed rgba(255,211,88,0.2);
+    overflow: hidden;
+}
+
+/* 碎片池 */
+.pieces-pool{
+    width:100%;
+    min-height:120px;
+    padding:15px;
+    background:rgba(0,0,0,0.15);
+    border:1px solid rgba(255,211,88,0.2);
+    border-radius:8px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    align-content:flex-start;
+}
+
+.puzzle-piece{
+    cursor:grab;
+    border:1px solid rgba(255,211,88,0.4);
+    user-select:none;
+    -webkit-user-drag:none;
+}
+.puzzle-piece:active{cursor:grabbing;}
+/* 放对位置的碎片高亮 */
+.puzzle-piece.correct{
+    border: 2px solid #ffd358;
+    box-shadow: 0 0 8px rgba(255,211,88,0.6);
+}
+
+/* 拖拽中的碎片 */
+.puzzle-piece.dragging{
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    margin: 0;
+}
+
+/* 通关弹窗 */
+.modal-mask{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.7);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+}
+.modal-box{
+    width:450px;
+    background:#8b1526;
+    border:2px solid #ffd358;
+    border-radius:12px;
+    padding:30px;
+    text-align:center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+.modal-box h2{
+    color:#ffd358;
+    margin-bottom:15px;
+    font-size:24px;
+}
+.modal-info{
+    color:#fff;
+    line-height:1.8;
+    margin-bottom:20px;
+    text-align:left;
+    font-size:14px;
+}
+.modal-info strong{color:#ffd358;}
+.modal-btn{
+    padding:10px 30px;
+    background:#ffd358;
+    color:#8b1526;
+    border:none;
+    border-radius:6px;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:15px;
+}
+
+#backTop{
+    position:fixed;
+    right:30px;
+    bottom:30px;
+    width:40px;
+    height:40px;
+    background:#ffd358;
+    color:#8b1526;
+    text-align:center;
+    line-height:40px;
+    border-radius:50%;
+    cursor:pointer;
+    display: none;
+    z-index:999;
+}
+
+.footer{
+    width:100%;
+    background:#690f1b;
+    padding:25px 0;
+    text-align:center;
+    color:#ddd;
+    font-size:15px;
+    border-top:1px solid #8c202e;
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<div class="nav">
+    <a href="../index.html">首页</a>
+    <a href="over.html">非遗总览</a>
+    <a href="game.html">闯关抽卡</a>
+    <a href="story.html">传承纪实</a>
+    <a href="message.html">守护留言</a>
+</div>
+
+<!-- 面包屑 -->
+<div class="breadcrumb">
+    <ul>
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="over.html">非遗总览</a></li>
+        <li>非遗拼图闯关</li>
+    </ul>
+</div>
+
+<div class="container">
+    <h2 class="page-title">非遗拼图 · 巧拼匠心</h2>
+
+    <!-- 左侧控制面板 -->
+    <div class="side-card">
+        <h3>选择非遗项目</h3>
+        <div class="level-list">
+            <div class="level-btn active" data-level="0">🏮 河北蔚县剪纸</div>
+            <div class="level-btn" data-level="1">🧵 苏州苏绣</div>
+            <div class="level-btn" data-level="2">🎭 京剧脸谱</div>
+            <div class="level-btn" data-level="3">🏺 景德镇制瓷</div>
+        </div>
+
+        <h3>选择难度</h3>
+        <div class="difficulty-box">
+            <div class="diff-btn active" data-grid="3">简单 3×3</div>
+            <div class="diff-btn" data-grid="4">困难 4×4</div>
+        </div>
+
+        <h3>游戏数据</h3>
+        <div class="info-item">
+            <span>用时</span>
+            <span id="timeText">0 秒</span>
+        </div>
+        <div class="info-item">
+            <span>步数</span>
+            <span id="stepText">0 步</span>
+        </div>
+        <div class="info-item">
+            <span>完成度</span>
+            <span id="progressText">0%</span>
+        </div>
+
+        <button class="operate-btn" onclick="restartGame()">🔄 重新开始</button>
+    </div>
+
+    <!-- 右侧游戏区 -->
+    <div class="game-area">
+        <div class="game-title" id="levelTitle">河北蔚县剪纸</div>
+
+        <div class="puzzle-board">
+            <div class="board-grid" id="boardGrid"></div>
+        </div>
+
+        <div class="pieces-pool" id="piecesPool"></div>
+    </div>
+</div>
+
+<!-- 通关弹窗 -->
+<div class="modal-mask" id="winModal">
+    <div class="modal-box">
+        <h2>🎉 拼图完成！</h2>
+        <div class="modal-info">
+            <p><strong>用时：</strong><span id="finalTime">0</span> 秒</p>
+            <p><strong>步数：</strong><span id="finalStep">0</span> 步</p>
+            <hr style="margin:10px 0;border-color:rgba(255,211,88,0.2)">
+            <p><strong>非遗小知识：</strong></p>
+            <p id="knowledgeText">蔚县剪纸源于明代，以刻代剪、刻染结合，是国家级非物质文化遗产，距今已有六百余年历史。</p>
+        </div>
+        <button class="modal-btn" onclick="closeModal()">继续挑战</button>
+    </div>
+</div>
+
+<div id="backTop" onclick="backTop()">↑</div>
+
+<div class="footer">
+    <p>薪火拾遗·中国非遗博览 | 前端期末课程大作业</p>
+</div>
+
+<script>
+// ===== 关卡配置 =====
+const levels = [
+    {
+        name: "河北蔚县剪纸",
+        img: "../images2/jianzhi3.png",
+        knowledge: "蔚县剪纸源于明代，以刻代剪、刻染结合，采用刻刀分层刻制后手工点染上色，是第一批国家级非物质文化遗产，距今已有六百余年历史。"
+    },
+    {
+        name: "苏州苏绣",
+        img: "../images2/suxiu1.png",
+        knowledge: "苏绣是中国四大名绣之首，以精细雅洁著称，针法多达四十余种，有“绣花能生香，绣鸟能听声”的美誉，2006年列入国家级非遗名录。"
+    },
+    {
+        name: "京剧脸谱",
+        img: "../images2/3.2.png",
+        knowledge: "京剧脸谱是京剧艺术的标志性元素，通过不同色彩与图案表现人物性格与身份，红忠、白奸、黑直、蓝猛，被誉为“国粹中的瑰宝”。"
+    },
+    {
+        name: "景德镇制瓷",
+        img: "../images2/ci1.png",
+        knowledge: "景德镇手工制瓷技艺传承千年，经拉坯、利坯、施釉、烧制等七十二道工序，青花瓷、玲珑瓷、粉彩、颜色釉并称四大传统名瓷。"
+    }
+];
+
+let currentLevel = 0;
+let gridSize = 3;
+let pieceSize = 110;
+let correctCount = 0;
+let steps = 0;
+let startTime = 0;
+let timer = null;
+
+// 拖拽核心变量
+let dragEl = null;
+let originParent = null;
+let offsetX = 0;
+let offsetY = 0;
+
+// ===== 初始化游戏 =====
+function initGame(){
+    const level = levels[currentLevel];
+    document.getElementById('levelTitle').innerText = level.name;
+    document.getElementById('timeText').innerText = '0 秒';
+    document.getElementById('stepText').innerText = '0 步';
+    document.getElementById('progressText').innerText = '0%';
+    
+    steps = 0;
+    correctCount = 0;
+    clearInterval(timer);
+    startTime = Date.now();
+    timer = setInterval(updateTime, 1000);
+
+    // 生成棋盘格子
+    const board = document.getElementById('boardGrid');
+    board.innerHTML = '';
+    board.style.gridTemplateColumns = `repeat(${gridSize}, ${pieceSize}px)`;
+    board.style.gridTemplateRows = `repeat(${gridSize}, ${pieceSize}px)`;
+
+    for(let y=0; y<gridSize; y++){
+        for(let x=0; x<gridSize; x++){
+            const cell = document.createElement('div');
+            cell.className = 'board-cell';
+            cell.cellX = x;
+            cell.cellY = y;
+            board.appendChild(cell);
+        }
+    }
+
+    // 生成碎片并打乱放入碎片池
+    const pool = document.getElementById('piecesPool');
+    pool.innerHTML = '';
+    let arr = [];
+    for(let y=0; y<gridSize; y++){
+        for(let x=0; x<gridSize; x++){
+            arr.push({x:x, y:y});
+        }
+    }
+    arr.sort(()=>Math.random()-0.5);
+
+    arr.forEach(p=>{
+        const div = document.createElement('div');
+        div.className = 'puzzle-piece';
+        div.style.width = pieceSize + 'px';
+        div.style.height = pieceSize + 'px';
+        div.style.backgroundImage = `url(${level.img})`;
+        div.style.backgroundSize = `${pieceSize*gridSize}px ${pieceSize*gridSize}px`;
+        div.style.backgroundPosition = `-${p.x*pieceSize}px -${p.y*pieceSize}px`;
+        div.correctX = p.x;
+        div.correctY = p.y;
+        div.isCorrect = false;
+        pool.appendChild(div);
+    });
+}
+
+function updateTime(){
+    const s = Math.floor((Date.now() - startTime)/1000);
+    document.getElementById('timeText').innerText = s + ' 秒';
+}
+
+// ========== 修复后拖拽逻辑（先算偏移再移动DOM，零偏移）==========
+document.addEventListener('mousedown', function(e){
+    if(!e.target.classList.contains('puzzle-piece')) return;
+    e.preventDefault();
+
+    dragEl = e.target;
+    originParent = dragEl.parentElement;
+
+    // 关键修复：先在原位置计算鼠标相对偏移，再移动DOM
+    const rect = dragEl.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+
+    // 如果之前是正确位置，拖走时取消状态
+    if(dragEl.isCorrect){
+        dragEl.classList.remove('correct');
+        dragEl.isCorrect = false;
+        correctCount--;
+        updateProgress();
+    }
+
+    // 再把碎片移到body最外层，脱离父容器影响
+    document.body.appendChild(dragEl);
+    dragEl.classList.add('dragging');
+
+    // 设置初始位置
+    dragEl.style.left = e.clientX - offsetX + 'px';
+    dragEl.style.top = e.clientY - offsetY + 'px';
+});
+
+document.addEventListener('mousemove', function(e){
+    if(!dragEl) return;
+    dragEl.style.left = e.clientX - offsetX + 'px';
+    dragEl.style.top = e.clientY - offsetY + 'px';
+});
+
+document.addEventListener('mouseup', function(e){
+    if(!dragEl) return;
+
+    const pool = document.getElementById('piecesPool');
+    const cells = document.querySelectorAll('.board-cell');
+    let targetCell = null;
+
+    // 遍历格子，找鼠标落点的空格子
+    for(let i=0; i<cells.length; i++){
+        const rect = cells[i].getBoundingClientRect();
+        if(e.clientX >= rect.left && e.clientX <= rect.right
+        && e.clientY >= rect.top && e.clientY <= rect.bottom){
+            if(!cells[i].hasChildNodes()){
+                targetCell = cells[i];
+            }
+            break;
+        }
+    }
+
+    // 移除拖拽状态
+    dragEl.classList.remove('dragging');
+    dragEl.style.position = '';
+    dragEl.style.left = '';
+    dragEl.style.top = '';
+    dragEl.style.zIndex = '';
+    dragEl.style.margin = '';
+
+    if(targetCell){
+        // 放入格子
+        targetCell.appendChild(dragEl);
+        steps++;
+
+        // 判断是否正确
+        if(dragEl.correctX === targetCell.cellX && dragEl.correctY === targetCell.cellY){
+            dragEl.classList.add('correct');
+            dragEl.isCorrect = true;
+            correctCount++;
+            updateProgress();
+            checkWin();
+        }
+    }else{
+        // 没放到空格子，放回碎片池
+        pool.appendChild(dragEl);
+        steps++;
+    }
+
+    dragEl = null;
+    originParent = null;
+    document.getElementById('stepText').innerText = steps + ' 步';
+});
+
+function updateProgress(){
+    const total = gridSize * gridSize;
+    const percent = Math.floor((correctCount / total) * 100);
+    document.getElementById('progressText').innerText = percent + '%';
+}
+
+// ===== 通关检测 =====
+function checkWin(){
+    const total = gridSize * gridSize;
+    if(correctCount === total){
+        clearInterval(timer);
+        const s = Math.floor((Date.now() - startTime)/1000);
+        document.getElementById('finalTime').innerText = s;
+        document.getElementById('finalStep').innerText = steps;
+        document.getElementById('knowledgeText').innerText = levels[currentLevel].knowledge;
+        document.getElementById('winModal').style.display = 'flex';
+    }
+}
+
+function closeModal(){
+    document.getElementById('winModal').style.display = 'none';
+}
+
+function restartGame(){
+    initGame();
+}
+
+// ===== 关卡切换 =====
+document.querySelectorAll('.level-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.level-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        currentLevel = Number(btn.dataset.level);
+        initGame();
+    });
+});
+
+// ===== 难度切换 =====
+document.querySelectorAll('.diff-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        gridSize = Number(btn.dataset.grid);
+        pieceSize = gridSize === 3 ? 110 : 85;
+        initGame();
+    });
+});
+
+// ===== 回到顶部 =====
+window.onscroll = function(){
+    let btn = document.getElementById("backTop");
+    btn.style.display = window.scrollY > 300 ? "block" : "none";
+}
+function backTop(){
+    window.scrollTo({top:0,behavior:'smooth'})
+}
+
+// 启动
+window.onload = initGame;
+</script>
+</body>
+</html>
